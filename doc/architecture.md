@@ -43,5 +43,13 @@ Voir s'il faut qu'ils aient une IP fixe, ou une sorte de résolution de nom du t
 - Répondre à des API Web
 - Envoyer et recevoir des messages ou bundles OSC
 - Envoyer et recevoir des siganux DMX
-- Envoyer et recevoir des informetions par liaison série (utile pour le débug).
+- Envoyer et recevoir des informations par liaison série (utile pour le débug).
+
+## IHM d'administration
+Cette IHM doit afficher toutes les données techniques de chaque dispositif, ainsi que les fonctions de pilotage, d'extinction, allumage, et redémarrage.
+Elle permet aussi de définir des associations de dispositifs : chaînage d'actions. 
+Exemple : Un dispositif comportant un bouton doit pouvoir être associé avec un dispositif jouant un média.
+
+## IHM du maître de jeu
+Cette IHM est celle de l'admin, sans les fonctionnalités de paramétrage.
 
