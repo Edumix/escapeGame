@@ -48,6 +48,7 @@ Voir s'il faut qu'ils aient une IP fixe, ou une sorte de résolution de nom du t
 ## IHM d'administration
 Cette IHM doit afficher toutes les données techniques de chaque dispositif, ainsi que les fonctions de pilotage, d'extinction, allumage, et redémarrage.
 Elle permet aussi de définir des associations de dispositifs : chaînage d'actions. 
+=> Brancher un catpeur avec un actionneur.
 Exemple : Un dispositif comportant un bouton doit pouvoir être associé avec un dispositif jouant un média.
 
 ## IHM du maître de jeu
