@@ -16,19 +16,26 @@
 #include <OSCData.h>
 
 // GPIO For feather Huzzah 4, 5, 2, 16, 0, 15
-#define ERROR_LED 0 // This the build-in led
+#define BUILDIN_LED 0 // This the build-in led
 
 // --------------------------------------------------------------------------------------
-// A UDP instance to let us send and receive packets over UDP
-WiFiUDP Udp;
-const unsigned int localPort = 2390;        // local port to listen for UDP packets for OSC messages
-const unsigned int wwwPort = 80;            // www server port
-
+// Wifi parameters
 char ssid[] = "escapegame";          // your network SSID (name)
 char pass[] = "echappeebelle";          // your network password
 
+// A UDP instance to let us send and receive packets over UDP
+WiFiUDP Udp;
+const unsigned int localPort = 2390;        // local port to listen for UDP packets for OSC messages
+
+// An Http Client to get info from server
+WiFiClient client;
+const int serverIP = IPAddress(192.168.10.199);
+//const int serverPort = 80;
+const char* serverHost = "http://" + humanReadableIP(serverIP) + "/register";
+
 // Web server
 ESP8266WebServer server(wwwPort);
+const unsigned int wwwPort = 80;            // www server port
 
 // --------------------------------------------------------------------------------------
 //     Handle to /close, /open, /pause and / (root) for infos
@@ -78,8 +85,8 @@ void readOSCBundle() {
 
     if (!bundle.hasError()) {
       // Dispatch from Addresses received to callback functions
-      //bundle.dispatch("/position", positionChange);
-      //bundle.dispatch("/state", adjustChange);
+      //bundle.dispatch("/position", mySuperCallBack);
+
 
     } else {
       // Errors, print them
@@ -87,7 +94,7 @@ void readOSCBundle() {
       Serial.print("error: ");
       Serial.println(error);
       // not connected => Message + Blink Lon
-      ledBlink(ERROR_LED, 200);
+      ledBlink(BUILDIN_LED, 200);
 
     }
   }
@@ -199,10 +206,6 @@ void setup()
   delay(100);
   Serial.println("");
 
-  // Wifi connection
-  //IPAddress gateway(192, 168, 10, 1);
-  //IPAddress subnet(255, 255, 255, 0);
-
   // Connect to WiFi network
   Serial.print("Connecting to SSID [");
   Serial.print(ssid);
@@ -210,7 +213,6 @@ void setup()
   Serial.print(pass);
   Serial.println("]");
 
- // WiFi.config(ip, gateway, subnet);
   WiFi.begin(ssid, pass);
 
   int k = 0;
@@ -220,7 +222,7 @@ void setup()
       Serial.println("");
     }
     k++;
-    ledBlink(ERROR_LED, 100);
+    ledBlink(BUILDIN_LED, 100);
     delay(100);
   }
   Serial.println("");
@@ -267,12 +269,12 @@ void loop()
   if (WiFi.status() != WL_CONNECTED) {
     // not connected => Message + Blink Short
     Serial.println("Wifi Not Connected :(");
-    ledBlink(ERROR_LED, 100);
+    ledBlink(BUILDIN_LED, 100);
   } else {
     //
     // Nominal running : Status led gives a 1 sec pulse.
     //
-    ledBlink(ERROR_LED, 1000);
+    ledBlink(BUILDIN_LED, 1000);
 
     // -------------------------------------------------------
     // Reading OSC Bundles : /position & /adjust
