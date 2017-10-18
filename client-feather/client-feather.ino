@@ -226,10 +226,11 @@ void setup()
   Serial.println("");
 
   Serial.println("WiFi connected");
-  Serial.print(" -> Mac address : ");
+  Serial.print("-> Mac address : ");
   Serial.println(humanReadableMacAddr());
   Serial.print("-> IP address : ");
   Serial.println(WiFi.localIP());
+  Serial.println("");
 
   // COnfiguring UDP for OSC dialog
   Serial.println("Starting UDP");
