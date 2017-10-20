@@ -170,7 +170,9 @@ function promptplayers() {
  *  ROUTING - API
  ----------------------------------------------------------------------*/
 app.get('/register', function(req, res) {
-
+	// See if this mac_address is known in the database
+	// If known => get the config back
+	// If not, register as a default device.
  });
 
 /*---------------------------------------------------------------------- 

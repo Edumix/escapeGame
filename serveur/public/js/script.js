@@ -28,14 +28,3 @@ function logPlayer(forceNewCookie = false) {
 socket.on('refreshPlayersCookie', function(data) {
   logPlayer(true);
 });
-
-/* * * * * */
-
-// INDEX
-
-$('.btn-index-to-naissance').on('click', function(){
-  $('.template').hide();
-  $('.template-naissance').show();
-
-  window.location.replace('/naissance');
-});
