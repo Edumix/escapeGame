@@ -64,7 +64,7 @@ server.listen(port, "0.0.0.0", function() {
   console.log( 'it is listening at port %d', port );
   console.log(bdd_feathers.feathers.length + " stored feathers");
   // ajout des chocards aux data
-  dataForTemplate.tinder_chocards = bdd_feathers.feathers;
+  dataForTemplate.feathers = bdd_feathers.feathers;
 
 });
 // catch 404 and forward to error handler
