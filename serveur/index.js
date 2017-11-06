@@ -7,7 +7,9 @@ var cookieParser = require('cookie-parser')
 
 var server = require('http').Server(app); //
 var io = require('socket.io')(server);
-
+// R/W in file
+var jsonfile = require('jsonfile');
+// loading Feathers database.
 var bdd_feathers = require('./data/feathers.js');
 
 var connect = require('connect');
@@ -19,8 +21,7 @@ var connect = require('connect');
 			feathers : {}
 		};
 
-//---------------------------------------------------------------------------
-
+// --------------------------------------------------------------------------
 
 var session = require("express-session")({
     secret: "my-secret",
@@ -169,8 +170,24 @@ function promptplayers() {
 /*---------------------------------------------------------------------- 
  *  ROUTING - API
  ----------------------------------------------------------------------*/
-app.get('/register', function(req, res) {
+app.get('/register/:mac_address', function(req, res) {
+	var found = false;
 	// See if this mac_address is known in the database
+	bdd_feathers.forEach(function(f, index){
+		if (f.mac_address == req.params.mac_address) {
+			found = true;
+			// Go to index
+			console.log("The feather exists as #" + index);
+			// Sending a default conf
+			// Notifying the admin client that à new device has been connected
+			io.sockets.emit('newdevice', {
+				new_mac_address: req.params.mac_address
+			});
+			// Sending acknoledge to the feather
+
+		}
+		//  res.redirect('/newdevice/?mac=' + req.params.mac_address);
+	});
 	// If known => get the config back
 	// If not, register as a default device.
  });

@@ -27,11 +27,7 @@
 
   <body>
     <div class="template template-index">
-      <div class="splash btn-index-to-naissance" style="background-image:url(img/splash.png)"/></div>
-    </div>
-
-    <div class="template template-naissance">
-      <div class="splash btn-index-to-naissance" style="background-image:url(img/splash.png)"/></div>
+      <div id="editor_holder"/></div>
     </div>
 
     <script type='text/javascript'>window.jQuery || document.write('<script src="/js/jquery.min.js"><\/script>')</script>
@@ -40,6 +36,20 @@
     <script src="/socket.io/socket.io.js"></script>
     <script src="/public/js/js.cookie.js"></script>
     <script src="/public/js/script.js"></script>
+    <script src="/public/js/jsoneditor/jsoneditor.js"></script>
+    <script>
+      // Set the default CSS theme and icon library globally
+      var element = document.getElementById('editor_holder');
+      var editor = new JSONEditor(element, {
+        theme: 'bootstrap3',
+        iconlib: 'bootstrap3',
+      });
 
+      // editor.on('ready',function() {
+      //   // Now the api methods will be available
+      //   editor.validate();
+      // });
+
+    </script>
   </body>
 </html>
