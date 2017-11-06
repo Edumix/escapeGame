@@ -8,6 +8,7 @@
 #include "serial_utils.h"
 #include "featherConf_utils.h"
 #include "functions_utils.h"
+#include "sound_utils.h"
 #include "wlan_utils.h"
 #include "www_utils.h"
 #include "osc_utils.h"
@@ -32,6 +33,9 @@ void setup()
 {
 
   setup_serial();
+
+  // Setting up the sound feather wings
+  setup_sound();
 
   // Connect to WiFi network
   setup_wlan(ssid, pass);
@@ -80,7 +84,8 @@ void loop()
     // -------------------------------------------------------
     // Playing with actionners
     // -------------------------------------------------------
-
+    soundDriver();
+    
   } // end else Wifi.status
 }
 

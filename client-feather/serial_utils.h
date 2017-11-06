@@ -13,7 +13,7 @@
 void setup_serial() {
   Serial.begin(SERIAL_SPEED);
   delay(100);
-  Serial.println("");
+  Serial.println("Serial is set up !");
 }
 
 // --------------------------------------------------------------------------------------

@@ -50,6 +50,49 @@ void handleRoot() {
 }
 
 // --------------------------------------------------------------------------------------
+//     Handle to /play for infos
+// --------------------------------------------------------------------------------------
+void playSound() {
+  Serial.println("Requested '/playSound'");
+  String content = "{ value : 0.0, ";
+  content += "message : 'Playing...' }";
+  server.send(200, "text/json", content);
+  playSoundCallback();
+}
+
+// --------------------------------------------------------------------------------------
+//     Handle to /pause for infos
+// --------------------------------------------------------------------------------------
+void pauseSound() {
+  Serial.println("Requested '/pauseSound'");
+  String content = "{ value : 0.0, ";
+  content += "message : 'Paused...' }";
+  server.send(200, "text/json", content);
+  pauseSoundCallback();
+}
+
+// --------------------------------------------------------------------------------------
+//     Handle to /stop for infos
+// --------------------------------------------------------------------------------------
+void stopSound() {
+  Serial.println("Requested '/stopSound'");
+  String content = "{ value : 0.0, ";
+  content += "message : 'Stopped !' }";
+  server.send(200, "text/json", content);
+}
+
+// --------------------------------------------------------------------------------------
+//     Handle to /stop for infos
+// --------------------------------------------------------------------------------------
+void sendJSONMsg(String msg) {
+  Serial.print("Sendding message to server : %s");
+  Serial.println(msg);
+  String content = "{ value : 0.0, ";
+  content += "message : '" + msg +  "' }";
+  server.send(200, "text/json", content);
+}
+
+// --------------------------------------------------------------------------------------
 //     Setting up WWW server
 // --------------------------------------------------------------------------------------
 void setup_www() {
@@ -57,6 +100,11 @@ void setup_www() {
   if (MDNS.begin("esp8266")) {
     Serial.println("MDNS responder started");
   }
+  
+  server.on("/play", playSound);
+  server.on("/pause", pauseSound);
+  server.on("/stop", stopSound);
+  
   server.on("/", handleRoot);
   server.onNotFound(handleNotFound);
   server.begin();
