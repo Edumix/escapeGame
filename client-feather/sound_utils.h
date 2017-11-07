@@ -116,7 +116,7 @@ void pauseSoundCallback() {
 //  Stopping sound Callback
 // --------------------------------------------------------------------------------------
 void stopSoundCallback() {
-  soundCmd = "sop";
+  soundCmd = "stop";
 }
 
 // --------------------------------------------------------------------------------------
@@ -126,11 +126,19 @@ void soundDriver() {
   if (soundCmd == "play") {
     if (!started) {
       // Start reading...
+      Serial.println("Start reading...");
       musicPlayer.startPlayingFile("TRACK001.MP3");
       started = true;
     } else {
+      if (!musicPlayer.stopped()) {
       // continue reading...
+      Serial.println("Resume reading...");
       musicPlayer.pausePlaying(false);
+      } else {
+        // The mp3 is finished, but the feather still receive a "play" order.
+        // Re-init for the next loop !
+        started = false;
+      }
     }
   }
 
@@ -145,7 +153,6 @@ void soundDriver() {
       Serial.println("stop");
       musicPlayer.stopPlaying();
       started = false;
-    }
   }
 
   if (musicPlayer.stopped()) {
