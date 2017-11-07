@@ -55,6 +55,9 @@
 Adafruit_VS1053_FilePlayer musicPlayer =
   Adafruit_VS1053_FilePlayer(VS1053_RESET, VS1053_CS, VS1053_DCS, VS1053_DREQ, CARDCS);
 
+// --------------------------------------------------------------------------------------
+//  Setting up the MP3/Music Maker Feather Wing
+// --------------------------------------------------------------------------------------
 void setup_sound() {
   // if you're using Bluefruit or LoRa/RFM Feather, disable the BLE interface
   //pinMode(8, INPUT_PULLUP);
@@ -69,17 +72,12 @@ void setup_sound() {
 
   Serial.println(F("VS1053 found"));
 
-  //musicPlayer.sineTest(0x22, 500);    // Make a tone to indicate VS1053 is working
-
   if (!SD.begin(CARDCS)) {
     //sendJSONMsg("ERROR : SD failed, or not present");
     Serial.println(F("ERROR : SD failed, or not present"));
     while (1);  // don't do anything more
   }
   Serial.println("SD OK!");
-
-  // list files
-  //printDirectory(SD.open("/"), 0);
 
   // Set volume for left, right channels. lower numbers == louder volume!
   musicPlayer.setVolume(5, 5);
@@ -100,14 +98,30 @@ void setup_sound() {
 boolean started = false;
 String soundCmd = "";
 
+// --------------------------------------------------------------------------------------
+//  Playing sound Callback
+// --------------------------------------------------------------------------------------
 void playSoundCallback() {
   soundCmd = "play";
 }
 
+// --------------------------------------------------------------------------------------
+//  Pausig sound Callback
+// --------------------------------------------------------------------------------------
 void pauseSoundCallback() {
   soundCmd = "pause";
 }
 
+// --------------------------------------------------------------------------------------
+//  Stopping sound Callback
+// --------------------------------------------------------------------------------------
+void stopSoundCallback() {
+  soundCmd = "sop";
+}
+
+// --------------------------------------------------------------------------------------
+//  Driving Sound
+// --------------------------------------------------------------------------------------
 void soundDriver() {
   if (soundCmd == "play") {
     if (!started) {
@@ -124,6 +138,13 @@ void soundDriver() {
     if (! musicPlayer.paused()) {
       Serial.println("Paused");
       musicPlayer.pausePlaying(true);
+    }
+  }
+
+  if (soundCmd == "stop") {
+      Serial.println("stop");
+      musicPlayer.stopPlaying();
+      started = false;
     }
   }
 
