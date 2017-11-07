@@ -4,14 +4,38 @@
     Erasme - Pierre-Gilles Levallois - Septembre 2017
     
   --------------------------------------------------------------------------------------------- */
+
+/* ----------------------------------------------------------------------------------------------
+    Configuration globale du feather
+    Décommenter les feathersWings pris en charge
+
+    @TODO : Mettre tout ça dans un fichier de conf config.h et commiter un config.h.sample
+------------------------------------------------------------------------------------------------*/
+//#define OSC_DRIVING  // Some code to receive and send OSC blundles
+#define MP3_READER
+//#define SENSOR_MODE
+//#define ACTUATOR_MODE
+//-----------------------------------------------------------------------------------------------
+
 #include <ESP8266WiFi.h>
 #include "serial_utils.h"
 #include "featherConf_utils.h"
 #include "functions_utils.h"
+
+#ifdef MP3_READER
 #include "sound_utils.h"
+#endif
+
 #include "wlan_utils.h"
 #include "www_utils.h"
+
+#ifdef OSC_DRIVING
 #include "osc_utils.h"
+#endif
+
+#ifdef SENSOR_MODE
+#include "sensors_mode_utils.h"
+#endif
 
 // GPIO For feather Huzzah 4, 5, 2, 16, 0, 15
 #define BUILDIN_LED 0 // This the build-in led
@@ -35,18 +59,28 @@ void setup()
   setup_serial();
 
   // Setting up the sound feather wings
+#ifdef MP3_READER
   setup_sound();
+#endif
 
   // Connect to WiFi network
   setup_wlan(ssid, pass);
 
   // Configuring UDP for OSC dialog
+#ifdef OSC_DRIVING
   setup_osc();
+#endif
 
   // Mounting web server
   setup_www();
-  
-  Serial.print(printFeatherInfo());
+
+  // Setting up buttons framwork
+#ifdef SENSOR_MODE
+  setup_sensor();
+#endif
+
+  // Print info
+  //Serial.print(printFeatherInfo());
 }
 
 // --------------------------------------------------------------------------------------
@@ -65,7 +99,9 @@ void loop()
     // -------------------------------------------------------
     // Reading OSC Bundles : /position & /adjust
     // -------------------------------------------------------
+#ifdef OSC_DRIVING
     readOSCBundle();
+#endif
 
     // -------------------------------------------------------
     // Reading command on serial
@@ -80,13 +116,27 @@ void loop()
     // -------------------------------------------------------
     // Reading sensors
     // -------------------------------------------------------
+    // @TODO : Comment rendre cette logique générique ?
+#ifdef SENSOR_MODE
+    if (digitalRead(PIN2) == HIGH) {
+      wwwSend(IPAddress(192, 168, 10, 101), "/play");
+    } else {
+      wwwSend(IPAddress(192, 168, 10, 101), "/stop");
+    }
+#endif
 
     // -------------------------------------------------------
     // Playing with actionners
     // -------------------------------------------------------
-    soundDriver();
     
+    // -------------------------------------------------------
+    // FeatherWing MP3 Player
+    // -------------------------------------------------------
+#ifdef MP3_READER
+    soundDriver();
+#endif
   } // end else Wifi.status
+  ledBlink(BUILDIN_LED, 1000);
 }
 
 
