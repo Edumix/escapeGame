@@ -7,6 +7,7 @@
   --------------------------------------------------------------------------------------------- */
 #include <ESP8266WebServer.h>
 #include <ESP8266mDNS.h>
+#include <ESP8266WiFi.h>
 
 // Web server
 const unsigned int wwwPort = 80;            // www server port
@@ -49,11 +50,12 @@ void handleRoot() {
   server.send(200, "text/json", content);
 }
 
+#ifdef MP3_READER
 // --------------------------------------------------------------------------------------
 //     Handle to /play for infos
 // --------------------------------------------------------------------------------------
 void playSound() {
-  Serial.println("Requested '/playSound'");
+  Serial.println("Requested '/play'");
   String content = "{ value : 0.0, ";
   content += "message : 'Playing...' }";
   server.send(200, "text/json", content);
@@ -64,7 +66,7 @@ void playSound() {
 //     Handle to /pause for infos
 // --------------------------------------------------------------------------------------
 void pauseSound() {
-  Serial.println("Requested '/pauseSound'");
+  Serial.println("Requested '/pause'");
   String content = "{ value : 0.0, ";
   content += "message : 'Paused...' }";
   server.send(200, "text/json", content);
@@ -75,11 +77,14 @@ void pauseSound() {
 //     Handle to /stop for infos
 // --------------------------------------------------------------------------------------
 void stopSound() {
-  Serial.println("Requested '/stopSound'");
+  Serial.println("Requested '/stop'");
   String content = "{ value : 0.0, ";
   content += "message : 'Stopped !' }";
   server.send(200, "text/json", content);
+  stopSoundCallback();
 }
+
+#endif
 
 // --------------------------------------------------------------------------------------
 //     Handle to /stop for infos
@@ -93,6 +98,40 @@ void sendJSONMsg(String msg) {
 }
 
 // --------------------------------------------------------------------------------------
+//    Send an url to someone
+// --------------------------------------------------------------------------------------
+void wwwSend(IPAddress host, String url) {
+  Serial.print("connecting to ");
+  Serial.println(humanReadableIp(host));
+
+  // Use WiFiClient class to create TCP connections
+  WiFiClient client;
+  if (!client.connect(host, 80)) {
+    Serial.println("connection failed");
+    return;
+  }
+
+  // We now create a URI for the request
+  Serial.print("Requesting URL: ");
+  Serial.println(url);
+
+  // This will send the request to the server
+  client.print(String("GET ") + url + " HTTP/1.1\r\n" +
+               "Host: " + host + "\r\n" +
+               "Connection: close\r\n\r\n");
+  delay(100);
+
+  // Read all the lines of the reply from server and print them to Serial
+  while (client.available()) {
+    String line = client.readStringUntil('\r');
+    Serial.print(line);
+  }
+
+  Serial.println();
+  Serial.println("closing connection");
+}
+
+// --------------------------------------------------------------------------------------
 //     Setting up WWW server
 // --------------------------------------------------------------------------------------
 void setup_www() {
@@ -100,11 +139,12 @@ void setup_www() {
   if (MDNS.begin("esp8266")) {
     Serial.println("MDNS responder started");
   }
-  
+
+#ifdef MP3_READER
   server.on("/play", playSound);
   server.on("/pause", pauseSound);
   server.on("/stop", stopSound);
-  
+#endif
   server.on("/", handleRoot);
   server.onNotFound(handleNotFound);
   server.begin();
