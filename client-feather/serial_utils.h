@@ -13,7 +13,7 @@
 void setup_serial() {
   Serial.begin(SERIAL_SPEED);
   delay(100);
-  Serial.println("Serial is set up !");
+  Serial.println("\nSerial is set up !");
 }
 
 // --------------------------------------------------------------------------------------
@@ -22,6 +22,7 @@ void setup_serial() {
 void readSerialCommand() {
   if (Serial.available() ) {
     int commande = Serial.read();
+    Serial.print("Get the character '"); Serial.print(commande); Serial.println("' by serial.");
     if (char(commande) == '0') {
     }
     if (char(commande) == '1') {
