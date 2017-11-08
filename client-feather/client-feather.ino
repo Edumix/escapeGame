@@ -12,8 +12,8 @@
     @TODO : Mettre tout ça dans un fichier de conf config.h et commiter un config.h.sample
 ------------------------------------------------------------------------------------------------*/
 //#define OSC_DRIVING  // Some code to receive and send OSC blundles
-#define MP3_READER
-//#define SENSOR_MODE
+//#define MP3_READER
+#define SENSOR_MODE
 //#define ACTUATOR_MODE
 //-----------------------------------------------------------------------------------------------
 
@@ -118,7 +118,7 @@ void loop()
     // -------------------------------------------------------
     // @TODO : Comment rendre cette logique générique ?
 #ifdef SENSOR_MODE
-    if (digitalRead(PIN2) == HIGH) {
+    if (digitalRead(PIN2) == LOW) {
       wwwSend(IPAddress(192, 168, 10, 101), "/play");
     } else {
       wwwSend(IPAddress(192, 168, 10, 101), "/stop");
