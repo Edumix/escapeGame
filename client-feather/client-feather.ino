@@ -15,6 +15,7 @@
 //#define MP3_READER
 #define SENSOR_MODE
 //#define ACTUATOR_MODE
+//#define MIDI_MODE     // Some Midi interface to get notes and doign an actions with this sequence
 //-----------------------------------------------------------------------------------------------
 
 #include <ESP8266WiFi.h>
@@ -35,6 +36,10 @@
 
 #ifdef SENSOR_MODE
 #include "sensors_mode_utils.h"
+#endif
+
+#ifdef MIDI_MODE
+#include "midi_utils.h"
 #endif
 
 // GPIO For feather Huzzah 4, 5, 2, 16, 0, 15
@@ -107,6 +112,13 @@ void loop()
     // Reading command on serial
     // -------------------------------------------------------
     readSerialCommand();
+
+#ifdef MIDI_MODE
+    // -------------------------------------------------------
+    // Reaing midi messages
+    // -------------------------------------------------------
+    readMidiMessages();
+#endif
 
     // -------------------------------------------------------
     // Handle Web server
