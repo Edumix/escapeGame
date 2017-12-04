@@ -15,7 +15,7 @@
 //#define MP3_READER
 #define SENSOR_MODE
 //#define ACTUATOR_MODE
-//#define MIDI_MODE     // Some Midi interface to get notes and doign an actions with this sequence
+//#define MIDI_MODE     // Some Midi interface to get notes and doing an actions with this sequence
 //-----------------------------------------------------------------------------------------------
 
 #include <ESP8266WiFi.h>
