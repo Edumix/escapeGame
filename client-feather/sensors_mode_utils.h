@@ -63,3 +63,16 @@ void setup_sensor() {
    Serial.println("Init I/O done !");
 }
 
+// --------------------------------------------------------------------------------------
+//  Initialisation
+// --------------------------------------------------------------------------------------
+String status_pins() {
+   String stat = "Pins Status\n";
+   stat += "----------------------------------\n";
+   for (int i = 0; i < NUM_PINS; i++) {
+    stat += " pin#" + String(i) + " -> PIN#" + PINS[i] + " : " + String(digitalRead(PINS[i])) + "\n";
+  }
+   stat += "----------------------------------\n";
+   return stat;
+}
+

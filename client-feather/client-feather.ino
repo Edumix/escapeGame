@@ -13,7 +13,7 @@
 ------------------------------------------------------------------------------------------------*/
 //#define OSC_DRIVING  // Some code to receive and send OSC blundles
 //#define MP3_READER
-#define SENSOR_MODE
+#define BUTTON_BOX
 //#define ACTUATOR_MODE
 //#define MIDI_MODE     // Some Midi interface to get notes and doing an actions with this sequence
 //-----------------------------------------------------------------------------------------------
@@ -27,15 +27,12 @@
 #include "sound_utils.h"
 #endif
 
+#include "sensors_mode_utils.h"
 #include "wlan_utils.h"
 #include "www_utils.h"
 
 #ifdef OSC_DRIVING
 #include "osc_utils.h"
-#endif
-
-#ifdef SENSOR_MODE
-#include "sensors_mode_utils.h"
 #endif
 
 #ifdef MIDI_MODE
@@ -80,9 +77,7 @@ void setup()
   setup_www();
 
   // Setting up buttons framwork
-#ifdef SENSOR_MODE
   setup_sensor();
-#endif
 
   // Print info
   //Serial.print(printFeatherInfo());
@@ -129,7 +124,7 @@ void loop()
     // Reading sensors
     // -------------------------------------------------------
     // @TODO : Comment rendre cette logique générique ?
-#ifdef SENSOR_MODE
+#ifdef BUTTON_BOX
     if (digitalRead(PIN2) == LOW) {
       wwwSend(IPAddress(192, 168, 10, 101), "/play");
     } else {

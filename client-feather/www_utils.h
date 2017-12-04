@@ -50,6 +50,18 @@ void handleRoot() {
   server.send(200, "text/json", content);
 }
 
+// --------------------------------------------------------------------------------------
+//     Handle to /status
+// --------------------------------------------------------------------------------------
+void handleStatus() {
+  Serial.println("Requested '/'");
+  String content = "{ value : 0.0, ";
+  content += "message : '";
+  content += status_pins();
+  content +=  "' }";
+  server.send(200, "text/json", content);
+}
+
 #ifdef MP3_READER
 // --------------------------------------------------------------------------------------
 //     Handle to /play for infos
@@ -146,6 +158,7 @@ void setup_www() {
   server.on("/stop", stopSound);
 #endif
   server.on("/", handleRoot);
+  server.on("/status", handleStatus);
   server.onNotFound(handleNotFound);
   server.begin();
   Serial.print("HTTP server started at http://");
